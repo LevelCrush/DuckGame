@@ -73,7 +73,7 @@ class DiscordAssets {
         const soundPath = this.getSoundByName(name);
         if (!soundPath) {
             console.warn(`Sound "${name}" not found`);
-            this.playFallbackSound();
+            this.playFallbackSound(volume);
             return;
         }
 
@@ -81,7 +81,7 @@ class DiscordAssets {
         audio.volume = volume;
         audio.play().catch(err => {
             console.error(`Failed to play sound "${name}":`, err);
-            this.playFallbackSound();
+            this.playFallbackSound(volume);
         });
     }
 
@@ -90,7 +90,7 @@ class DiscordAssets {
         const soundPath = this.getRandomSound();
         if (!soundPath) {
             // Fallback to Web Audio API hit sound if no Discord sounds available
-            this.playFallbackSound();
+            this.playFallbackSound(volume);
             return;
         }
 
@@ -98,12 +98,12 @@ class DiscordAssets {
         audio.volume = volume;
         audio.play().catch(err => {
             console.error('Failed to play sound:', err);
-            this.playFallbackSound();
+            this.playFallbackSound(volume);
         });
     }
 
     // Fallback sound using Web Audio API (original hit sound)
-    playFallbackSound() {
+    playFallbackSound(volume = 0.2) {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
@@ -115,7 +115,7 @@ class DiscordAssets {
         oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
         oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
         
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
         
         oscillator.start(audioContext.currentTime);

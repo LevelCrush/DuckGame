@@ -42,6 +42,37 @@
             z-index: 100;
         }
         
+        #volumeControl {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #volumeControl label {
+            color: white;
+            font-size: 14px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        #volumeSlider {
+            width: 100px;
+        }
+        
+        #volumeValue {
+            color: white;
+            font-size: 14px;
+            min-width: 35px;
+            text-align: right;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
         .duck {
             position: absolute;
             font-size: 40px;
@@ -227,10 +258,31 @@
         
         .flame {
             position: absolute;
-            bottom: -50px;
             font-size: 60px;
             opacity: 0.8;
             animation: flicker 0.5s ease-in-out infinite alternate;
+            z-index: 5;
+        }
+        
+        .flame-row-1 {
+            bottom: -30px;
+        }
+        
+        .flame-row-2 {
+            bottom: 20px;
+            font-size: 55px;
+        }
+        
+        .flame-row-3 {
+            bottom: 70px;
+            font-size: 50px;
+            opacity: 0.7;
+        }
+        
+        .flame-row-4 {
+            bottom: 115px;
+            font-size: 45px;
+            opacity: 0.6;
         }
         
         @keyframes flicker {
@@ -258,6 +310,11 @@
     <div id="gameArea">
         <div id="score">Score: 0</div>
         <div id="timer">Time: 30</div>
+        <div id="volumeControl">
+            <label for="volumeSlider">🔊</label>
+            <input type="range" id="volumeSlider" min="0" max="100" value="20">
+            <span id="volumeValue">20%</span>
+        </div>
         
         <div id="startScreen">
             <h1>🦆 Duck Catcher 🦆</h1>
@@ -279,18 +336,28 @@
         let timerInterval;
         let duckInterval;
         let ducksCaught = 0;  // Track total ducks caught for timer bonus
+        let gameVolume = 0.20;  // Default volume at 20%
         
         // Load Discord assets on page load
         window.addEventListener('DOMContentLoaded', async () => {
             console.log('Loading Discord assets...');
             await window.discordAssets.loadAssets();
             console.log('Discord assets loaded!');
+            
+            // Setup volume slider
+            const volumeSlider = document.getElementById('volumeSlider');
+            const volumeValue = document.getElementById('volumeValue');
+            
+            volumeSlider.addEventListener('input', (e) => {
+                gameVolume = e.target.value / 100;
+                volumeValue.textContent = e.target.value + '%';
+            });
         });
         
         // Play hit sound - uses Discord hitmarker sound
         function playHitSound() {
             if (window.discordAssets && window.discordAssets.loaded) {
-                window.discordAssets.playSoundByName('hitmarker', 0.3);
+                window.discordAssets.playSoundByName('hitmarker', gameVolume);
             } else {
                 // Fallback to Web Audio API
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -304,7 +371,7 @@
                 oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
                 oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
                 
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(gameVolume, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
                 
                 oscillator.start(audioContext.currentTime);
@@ -375,9 +442,15 @@
                     setTimeout(() => timer.style.color = 'white', 500);
                 }
                 
-                // Play Taco Bell sound every 5 ducks
-                if (ducksCaught % 5 === 0 && window.discordAssets && window.discordAssets.loaded) {
-                    window.discordAssets.playSoundByName('tbell', 0.4);
+                // Every 5 ducks: play Taco Bell sound and duplicate ducks!
+                if (ducksCaught % 5 === 0) {
+                    if (window.discordAssets && window.discordAssets.loaded) {
+                        window.discordAssets.playSoundByName('tbell', gameVolume * 1.2);  // Slightly louder for celebration
+                    }
+                    // DUPLICATE THE DUCKS!
+                    for (let i = 0; i < 2; i++) {
+                        setTimeout(() => spawnDuck(), i * 200);  // Stagger the spawns
+                    }
                 }
                 
                 // Get duck position for effects
@@ -469,15 +542,24 @@
                 document.getElementById('gameArea').appendChild(devil);
             }
             
-            // Add flame effects at the bottom
-            for (let i = 0; i < 8; i++) {
-                const flame = document.createElement('div');
-                flame.className = 'flame';
-                flame.textContent = '🔥';  // Fire emoji
-                flame.style.left = (i * 12.5) + '%';
-                flame.style.animationDelay = (Math.random() * 0.5) + 's';
-                document.getElementById('gameArea').appendChild(flame);
-            }
+            // Add multiple rows of flame effects covering bottom 20% of screen
+            const flameRows = [
+                { class: 'flame-row-1', count: 12, spacing: 100/12 },
+                { class: 'flame-row-2', count: 10, spacing: 100/10 },
+                { class: 'flame-row-3', count: 11, spacing: 100/11 },
+                { class: 'flame-row-4', count: 9, spacing: 100/9 }
+            ];
+            
+            flameRows.forEach(row => {
+                for (let i = 0; i < row.count; i++) {
+                    const flame = document.createElement('div');
+                    flame.className = `flame ${row.class}`;
+                    flame.textContent = '🔥';  // Fire emoji
+                    flame.style.left = (i * row.spacing + (row.spacing/2 * (row.class === 'flame-row-2' || row.class === 'flame-row-4' ? 1 : 0))) + '%';
+                    flame.style.animationDelay = (Math.random() * 0.5) + 's';
+                    document.getElementById('gameArea').appendChild(flame);
+                }
+            });
         }
         
         function endGame() {
