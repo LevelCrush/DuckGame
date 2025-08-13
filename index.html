@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Catcher Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #87CEEB 0%, #98D8E8 50%, #7FCDBB 100%);
+            height: 100vh;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+        
+        #gameArea {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+        
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+        
+        #timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+        
+        .duck {
+            position: absolute;
+            font-size: 40px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+        
+        .duck:hover {
+            transform: scale(1.2);
+        }
+        
+        .splash {
+            position: absolute;
+            font-size: 30px;
+            pointer-events: none;
+            animation: splash 0.5s ease-out forwards;
+        }
+        
+        @keyframes splash {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
+        #gameOver h2 {
+            margin-top: 0;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        #startScreen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
+        .cloud {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.7;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            from {
+                left: -100px;
+            }
+            to {
+                left: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameArea">
+        <div id="score">Score: 0</div>
+        <div id="timer">Time: 30</div>
+        
+        <div id="startScreen">
+            <h1>🦆 Duck Catcher 🦆</h1>
+            <p>Click as many ducks as you can in 30 seconds!</p>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+        
+        <div id="gameOver">
+            <h2>Game Over!</h2>
+            <p id="finalScore">Your Score: 0</p>
+            <button onclick="startGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let gameInterval;
+        let timerInterval;
+        let duckInterval;
+        
+        function startGame() {
+            score = 0;
+            timeLeft = 30;
+            document.getElementById('score').textContent = 'Score: 0';
+            document.getElementById('timer').textContent = 'Time: 30';
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'none';
+            
+            // Add some clouds for atmosphere
+            addClouds();
+            
+            // Start spawning ducks
+            spawnDuck();
+            duckInterval = setInterval(spawnDuck, 1000);
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = 'Time: ' + timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+        
+        function spawnDuck() {
+            const duck = document.createElement('div');
+            duck.className = 'duck';
+            duck.textContent = '🦆';
+            
+            // Random position
+            const maxX = window.innerWidth - 60;
+            const maxY = window.innerHeight - 60;
+            const x = Math.random() * maxX;
+            const y = Math.random() * (maxY - 100) + 50; // Avoid spawning at very top
+            
+            duck.style.left = x + 'px';
+            duck.style.top = y + 'px';
+            
+            // Random movement
+            const moveX = (Math.random() - 0.5) * 4;
+            const moveY = (Math.random() - 0.5) * 4;
+            
+            duck.onclick = function() {
+                score++;
+                document.getElementById('score').textContent = 'Score: ' + score;
+                
+                // Create splash effect
+                const splash = document.createElement('div');
+                splash.className = 'splash';
+                splash.textContent = '💦';
+                splash.style.left = duck.style.left;
+                splash.style.top = duck.style.top;
+                document.getElementById('gameArea').appendChild(splash);
+                
+                setTimeout(() => splash.remove(), 500);
+                
+                duck.remove();
+            };
+            
+            document.getElementById('gameArea').appendChild(duck);
+            
+            // Move the duck
+            let posX = x;
+            let posY = y;
+            const moveInterval = setInterval(() => {
+                posX += moveX;
+                posY += moveY;
+                
+                // Bounce off walls
+                if (posX <= 0 || posX >= maxX) {
+                    posX = Math.max(0, Math.min(maxX, posX));
+                    clearInterval(moveInterval);
+                }
+                if (posY <= 50 || posY >= maxY) {
+                    posY = Math.max(50, Math.min(maxY, posY));
+                    clearInterval(moveInterval);
+                }
+                
+                duck.style.left = posX + 'px';
+                duck.style.top = posY + 'px';
+            }, 50);
+            
+            // Remove duck after 3 seconds if not clicked
+            setTimeout(() => {
+                if (duck.parentNode) {
+                    duck.remove();
+                    clearInterval(moveInterval);
+                }
+            }, 3000);
+        }
+        
+        function addClouds() {
+            // Remove existing clouds
+            document.querySelectorAll('.cloud').forEach(cloud => cloud.remove());
+            
+            for (let i = 0; i < 3; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.textContent = '☁️';
+                cloud.style.top = Math.random() * 200 + 'px';
+                cloud.style.animationDelay = i * 7 + 's';
+                document.getElementById('gameArea').appendChild(cloud);
+            }
+        }
+        
+        function endGame() {
+            clearInterval(timerInterval);
+            clearInterval(duckInterval);
+            
+            // Remove all ducks
+            document.querySelectorAll('.duck').forEach(duck => duck.remove());
+            
+            // Show game over screen
+            document.getElementById('finalScore').textContent = 'Your Score: ' + score;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
