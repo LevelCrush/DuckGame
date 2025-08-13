@@ -10,12 +10,25 @@ This document contains important context and notes for AI assistants (particular
 
 ## Key Development Guidelines
 
-### Lord Xol's Vision
-The game was created under the direction of "Lord Xol" with specific requirements:
+### Lord Xol's Vision (Updated v2.0)
+The game was created under the direction of "Lord Xol" with evolving requirements:
+
+**Original Vision (v1.0):**
 - Visceral feedback when ducks are eliminated (blood, feathers, smoke)
 - Hit marker sound effects on successful clicks
 - Bright red crosshair cursor when hovering over targets
 - Integration with Discord assets for enhanced gameplay
+
+**Infernal Expansion (v2.0):**
+- Timer extensions (+30s per 15 ducks) for extended gameplay
+- Discord hitmarker sound replacing generic beep
+- Complete theme transformation to hellfire aesthetic
+- Devil emojis replacing clouds
+- Taco Bell celebration sound every 5 ducks
+- Duck duplication mechanics for exponential difficulty
+- Volume control for loud Discord sounds (default 20%)
+- Massive flame wall covering bottom 20% of screen
+- Divine spawn effects for bonus ducks (light rays, smoke, feathers)
 
 ### Code Style Preferences
 - Keep the game in a **single HTML file** for GitHub Pages deployment
@@ -70,16 +83,28 @@ The game was created under the direction of "Lord Xol" with specific requirement
 - Add CSS classes in the `<style>` section
 - Create elements dynamically in JavaScript
 - Use `setTimeout` to clean up DOM elements
+- Example: `createSpawnEffect()` for bonus duck spawning
 
 ### Modifying Game Mechanics
 - Game state variables are at the top of the `<script>` section
-- `spawnDuck()` controls duck creation and behavior
+- `spawnDuck(x, y, showEffect)` controls duck creation and behavior
+  - Now accepts position parameters for targeted spawning
+  - `showEffect` boolean triggers spawn animations
 - `startGame()` and `endGame()` manage game flow
+- `ducksCaught` tracks total for bonuses separate from score
 
 ### Updating Discord Integration
 - Modify `fetch-discord-assets.js` for fetching logic
 - Update `discord-assets.js` for runtime usage
+- Use `playSoundByName()` for specific sounds (hitmarker, tbell)
 - Test with both Discord assets present and absent
+- Volume parameter now propagates through all sound methods
+
+### Managing Game Difficulty
+- Duck spawn interval: 1000ms (1 second)
+- Bonus duck triggers: Every 5 catches
+- Timer bonus triggers: Every 15 catches
+- Volume default: 20% (adjustable via slider)
 
 ## Testing Checklist
 
@@ -101,16 +126,37 @@ When making changes, verify:
 - Use CSS transforms over position changes
 - Batch DOM updates when possible
 
+## Recent Updates (v2.0)
+
+### Major Changes Implemented
+- **Volume Control**: Slider UI with 0-100% range
+- **Infernal Theme**: Complete visual overhaul with fire and devils
+- **Spawn Effects**: Multi-layered animation system for bonus ducks
+- **Duck Duplication**: Exponential difficulty scaling
+- **Timer Extensions**: Reward system for skilled players
+- **Enhanced Sounds**: Discord-specific audio integration
+
+### Technical Improvements
+- Modified `spawnDuck()` signature for position control
+- Added `createSpawnEffect()` for visual feedback
+- Enhanced `discord-assets.js` with named sound support
+- Implemented `gameVolume` global variable for audio control
+- Added boundary checking for spawn positions
+
 ## Future Enhancement Ideas
 
 Potential features to consider:
-- Difficulty levels (speed, spawn rate)
-- Power-ups or special ducks
-- Leaderboard system
-- Multiple game modes
-- Background music
-- Achievement system
-- Mobile touch optimization
+- Difficulty levels (speed, spawn rate presets)
+- Power-ups or special ducks (golden duck = 5 points?)
+- Leaderboard system (local storage or backend)
+- Multiple game modes (survival, time attack, zen)
+- Background music (Discord integration)
+- Achievement system (milestones and badges)
+- Mobile touch optimization (larger hit boxes)
+- Save system for high scores
+- Different duck types with varying point values
+- Combo system for consecutive hits
+- Screen shake on special events
 
 ## Deployment Notes
 

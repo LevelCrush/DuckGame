@@ -4,13 +4,32 @@ A fast-paced duck hunting game with Discord integration for custom assets and so
 
 🎮 **[Play Now on GitHub Pages](https://levelcrush.github.io/DuckGame/)**
 
-## Features
+## 🔥 Features (v2.0 - The Infernal Update)
 
-- **30-Second Challenge**: Click as many ducks as you can before time runs out
-- **Visual Effects**: Blood splatter, feathers, and smoke effects on successful hits
-- **Custom Sounds**: Integrated with Discord soundboard for dynamic sound effects
-- **Red Crosshair**: Enhanced targeting system with bright red cursor on hover
-- **Discord Assets**: Supports custom emojis, stickers, and sounds from your Discord server
+### Core Gameplay
+- **Dynamic Timer**: Starts at 30 seconds, +30 bonus seconds per 15 ducks caught
+- **Duck Multiplication**: Every 5 ducks caught spawns 2 bonus ducks with divine effects
+- **Score Tracking**: Real-time score display with visual feedback
+- **Progressive Difficulty**: Exponential challenge increase through duck duplication
+
+### Visual Effects
+- **Infernal Theme**: Animated red gradient background with fire glow
+- **Wall of Flames**: 42 flame emojis across 4 rows (bottom 20% of screen)
+- **Devil Clouds**: Floating devil emojis replacing peaceful clouds
+- **Kill Effects**: Blood splatter, 6-directional feathers, smoke puffs
+- **Spawn Effects**: Divine light rays, smoke bursts, and feather explosions
+- **Red Crosshair**: Bright targeting reticle when hovering over ducks
+
+### Audio System
+- **Volume Control**: Adjustable slider (0-100%, default 20%)
+- **Discord Sounds**: Hitmarker and Taco Bell celebration effects
+- **Smart Fallback**: Web Audio API backup when Discord unavailable
+- **Celebration Audio**: Special sound every 5 ducks caught
+
+### Discord Integration
+- **Custom Assets**: Use your server's emojis, stickers, and soundboard
+- **Base64 Support**: Works seamlessly with GitHub Pages
+- **Automatic Loading**: Assets load on game start
 
 ## Quick Start
 
@@ -108,10 +127,45 @@ duck-game/
 
 Feel free to submit issues and pull requests! The game is designed to be simple and extensible.
 
+## What's New in v2.0
+
+- 🔊 **Volume Control** - Adjustable sound levels with visual slider
+- 🔥 **Infernal Theme** - Complete hellfire visual overhaul
+- 🦆 **Duck Duplication** - Bonus spawns every 5 catches
+- ⏱️ **Timer Extensions** - Earn more time by catching ducks
+- ✨ **Spawn Effects** - Divine light and feather explosions
+- 😈 **Devil Clouds** - Demonic atmosphere enhancements
+- 🔥 **Wall of Flames** - Multi-layered fire effects
+
+See [CHANGELOG.md](CHANGELOG.md) for complete version history.
+
+## Game Mechanics
+
+### Scoring System
+- Each duck caught = 1 point
+- No score penalties for misses
+- Final score displayed at game over
+
+### Bonus Mechanics
+- **Every 5 ducks**: Taco Bell sound + 2 bonus ducks spawn
+- **Every 15 ducks**: +30 seconds added to timer (green flash)
+- **Spawn Position**: Bonus ducks appear near the eliminated duck
+
+### Visual Feedback
+- Timer flashes green when time bonus awarded
+- Spawn effects indicate bonus duck arrival
+- Kill effects confirm successful hits
+
 ## Credits
 
-Created by Lord Xol's command and implemented with the assistance of Claude.
+Created under the divine command of **Lord Xol** and implemented with the assistance of Claude.
+
+Special thanks to the Discord community for providing the epic sound effects.
 
 ## License
 
 Open source - feel free to modify and share!
+
+---
+
+*"The will of Lord Xol has been honored in all development decisions."*
