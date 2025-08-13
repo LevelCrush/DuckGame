@@ -302,6 +302,70 @@
             opacity: 0.8;
             animation: float 15s infinite linear;
         }
+        
+        .spawn-effect {
+            position: absolute;
+            pointer-events: none;
+            z-index: 50;
+        }
+        
+        .spawn-smoke {
+            position: absolute;
+            font-size: 50px;
+            animation: spawnSmoke 1s ease-out forwards;
+        }
+        
+        @keyframes spawnSmoke {
+            0% {
+                transform: scale(0.5) rotate(0deg);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(3) rotate(180deg) translateY(-30px);
+                opacity: 0;
+            }
+        }
+        
+        .spawn-feather {
+            position: absolute;
+            font-size: 25px;
+            animation: spawnFeather 1.5s ease-out forwards;
+        }
+        
+        @keyframes spawnFeather {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(60px) rotate(720deg) scale(0.3);
+                opacity: 0;
+            }
+        }
+        
+        .light-ray {
+            position: absolute;
+            width: 3px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,223,0,0.7), transparent);
+            transform-origin: center bottom;
+            animation: lightRay 0.8s ease-out forwards;
+        }
+        
+        @keyframes lightRay {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -393,7 +457,7 @@
             
             // Start spawning ducks
             spawnDuck();
-            duckInterval = setInterval(spawnDuck, 1000);
+            duckInterval = setInterval(() => spawnDuck(), 1000);
             
             // Start timer
             timerInterval = setInterval(() => {
@@ -406,16 +470,76 @@
             }, 1000);
         }
         
-        function spawnDuck() {
+        function createSpawnEffect(x, y) {
+            const effectContainer = document.createElement('div');
+            effectContainer.className = 'spawn-effect';
+            effectContainer.style.left = x + 'px';
+            effectContainer.style.top = y + 'px';
+            
+            // Create smoke puff
+            const smoke = document.createElement('div');
+            smoke.className = 'spawn-smoke';
+            smoke.textContent = '💨';
+            smoke.style.left = '-25px';
+            smoke.style.top = '-25px';
+            effectContainer.appendChild(smoke);
+            
+            // Create feathers
+            for (let i = 0; i < 6; i++) {
+                const feather = document.createElement('div');
+                feather.className = 'spawn-feather';
+                feather.textContent = '🪶';
+                const angle = (Math.PI * 2 * i) / 6;
+                const distance = 30;
+                feather.style.left = (Math.cos(angle) * distance) + 'px';
+                feather.style.top = (Math.sin(angle) * distance) + 'px';
+                feather.style.animationDelay = (i * 0.05) + 's';
+                effectContainer.appendChild(feather);
+            }
+            
+            // Create light rays
+            for (let i = 0; i < 8; i++) {
+                const ray = document.createElement('div');
+                ray.className = 'light-ray';
+                ray.style.left = '0px';
+                ray.style.top = '0px';
+                ray.style.transform = `rotate(${i * 45}deg)`;
+                ray.style.animationDelay = (i * 0.05) + 's';
+                effectContainer.appendChild(ray);
+            }
+            
+            document.getElementById('gameArea').appendChild(effectContainer);
+            
+            // Remove effect after animation
+            setTimeout(() => effectContainer.remove(), 1500);
+        }
+        
+        function spawnDuck(x = null, y = null, showEffect = false) {
             const duck = document.createElement('div');
             duck.className = 'duck';
             duck.textContent = '🦆';
             
-            // Random position
+            // Use provided position or random
             const maxX = window.innerWidth - 60;
             const maxY = window.innerHeight - 60;
-            const x = Math.random() * maxX;
-            const y = Math.random() * (maxY - 100) + 50; // Avoid spawning at very top
+            
+            // If position provided, add some random offset
+            if (x !== null && y !== null) {
+                // Add random offset around the provided position
+                const offsetX = (Math.random() - 0.5) * 150;  // ±75px
+                const offsetY = (Math.random() - 0.5) * 150;  // ±75px
+                x = Math.max(0, Math.min(maxX, x + offsetX));
+                y = Math.max(50, Math.min(maxY, y + offsetY));
+                
+                // Show spawn effect if requested
+                if (showEffect) {
+                    createSpawnEffect(x + 20, y + 20);  // Center on duck
+                }
+            } else {
+                // Random position
+                x = Math.random() * maxX;
+                y = Math.random() * (maxY - 100) + 50; // Avoid spawning at very top
+            }
             
             duck.style.left = x + 'px';
             duck.style.top = y + 'px';
@@ -447,9 +571,11 @@
                     if (window.discordAssets && window.discordAssets.loaded) {
                         window.discordAssets.playSoundByName('tbell', gameVolume * 1.2);  // Slightly louder for celebration
                     }
-                    // DUPLICATE THE DUCKS!
+                    // DUPLICATE THE DUCKS near the killed duck!
                     for (let i = 0; i < 2; i++) {
-                        setTimeout(() => spawnDuck(), i * 200);  // Stagger the spawns
+                        setTimeout(() => {
+                            spawnDuck(duckX, duckY, true);  // Pass position and request effect
+                        }, i * 200);  // Stagger the spawns
                     }
                 }
                 
