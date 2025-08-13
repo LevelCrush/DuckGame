@@ -9,7 +9,8 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #87CEEB 0%, #98D8E8 50%, #7FCDBB 100%);
+            background: linear-gradient(to bottom, #8B0000 0%, #DC143C 30%, #FF4500 60%, #FF6347 100%);
+            animation: fireGlow 3s ease-in-out infinite;
             height: 100vh;
             overflow: hidden;
             cursor: crosshair;
@@ -214,6 +215,41 @@
                 left: 100%;
             }
         }
+        
+        @keyframes fireGlow {
+            0%, 100% {
+                background: linear-gradient(to bottom, #8B0000 0%, #DC143C 30%, #FF4500 60%, #FF6347 100%);
+            }
+            50% {
+                background: linear-gradient(to bottom, #B22222 0%, #FF0000 30%, #FF6347 60%, #FFA500 100%);
+            }
+        }
+        
+        .flame {
+            position: absolute;
+            bottom: -50px;
+            font-size: 60px;
+            opacity: 0.8;
+            animation: flicker 0.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0% {
+                transform: translateY(0) scale(1) rotate(-5deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-20px) scale(1.2) rotate(5deg);
+                opacity: 0.9;
+            }
+        }
+        
+        .devil {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.8;
+            animation: float 15s infinite linear;
+        }
     </style>
 </head>
 <body>
@@ -242,6 +278,7 @@
         let gameInterval;
         let timerInterval;
         let duckInterval;
+        let ducksCaught = 0;  // Track total ducks caught for timer bonus
         
         // Load Discord assets on page load
         window.addEventListener('DOMContentLoaded', async () => {
@@ -250,10 +287,10 @@
             console.log('Discord assets loaded!');
         });
         
-        // Play hit sound - uses Discord sounds if available
+        // Play hit sound - uses Discord hitmarker sound
         function playHitSound() {
             if (window.discordAssets && window.discordAssets.loaded) {
-                window.discordAssets.playRandomSound(0.3);
+                window.discordAssets.playSoundByName('hitmarker', 0.3);
             } else {
                 // Fallback to Web Audio API
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -277,6 +314,7 @@
         
         function startGame() {
             score = 0;
+            ducksCaught = 0;
             timeLeft = 30;
             document.getElementById('score').textContent = 'Score: 0';
             document.getElementById('timer').textContent = 'Time: 30';
@@ -321,10 +359,26 @@
             
             duck.onclick = function() {
                 score++;
+                ducksCaught++;
                 document.getElementById('score').textContent = 'Score: ' + score;
                 
                 // Play hit sound
                 playHitSound();
+                
+                // Check for timer bonus every 15 ducks
+                if (ducksCaught % 15 === 0) {
+                    timeLeft += 30;
+                    document.getElementById('timer').textContent = 'Time: ' + timeLeft;
+                    // Flash timer green to show bonus
+                    const timer = document.getElementById('timer');
+                    timer.style.color = '#00FF00';
+                    setTimeout(() => timer.style.color = 'white', 500);
+                }
+                
+                // Play Taco Bell sound every 5 ducks
+                if (ducksCaught % 5 === 0 && window.discordAssets && window.discordAssets.loaded) {
+                    window.discordAssets.playSoundByName('tbell', 0.4);
+                }
                 
                 // Get duck position for effects
                 const duckX = parseInt(duck.style.left);
@@ -402,16 +456,27 @@
         }
         
         function addClouds() {
-            // Remove existing clouds
-            document.querySelectorAll('.cloud').forEach(cloud => cloud.remove());
+            // Remove existing clouds/devils
+            document.querySelectorAll('.cloud, .devil').forEach(el => el.remove());
             
-            for (let i = 0; i < 3; i++) {
-                const cloud = document.createElement('div');
-                cloud.className = 'cloud';
-                cloud.textContent = '☁️';
-                cloud.style.top = Math.random() * 200 + 'px';
-                cloud.style.animationDelay = i * 7 + 's';
-                document.getElementById('gameArea').appendChild(cloud);
+            // Add devil emojis instead of clouds
+            for (let i = 0; i < 4; i++) {
+                const devil = document.createElement('div');
+                devil.className = 'devil';
+                devil.textContent = '😈';  // Devil emoji
+                devil.style.top = Math.random() * 200 + 'px';
+                devil.style.animationDelay = i * 5 + 's';
+                document.getElementById('gameArea').appendChild(devil);
+            }
+            
+            // Add flame effects at the bottom
+            for (let i = 0; i < 8; i++) {
+                const flame = document.createElement('div');
+                flame.className = 'flame';
+                flame.textContent = '🔥';  // Fire emoji
+                flame.style.left = (i * 12.5) + '%';
+                flame.style.animationDelay = (Math.random() * 0.5) + 's';
+                document.getElementById('gameArea').appendChild(flame);
             }
         }
         
@@ -419,8 +484,8 @@
             clearInterval(timerInterval);
             clearInterval(duckInterval);
             
-            // Remove all ducks
-            document.querySelectorAll('.duck').forEach(duck => duck.remove());
+            // Remove all ducks, flames, and devils
+            document.querySelectorAll('.duck, .flame, .devil').forEach(el => el.remove());
             
             // Show game over screen
             document.getElementById('finalScore').textContent = 'Your Score: ' + score;

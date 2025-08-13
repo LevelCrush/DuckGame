@@ -61,6 +61,30 @@ class DiscordAssets {
         return sticker.dataUrl || `stickers/${sticker.filename}`;
     }
 
+    // Get a specific sound by name
+    getSoundByName(name) {
+        const sound = this.sounds.find(s => s.name === name);
+        if (!sound) return null;
+        return sound.dataUrl || `sounds/${sound.filename}`;
+    }
+
+    // Play a specific sound by name
+    playSoundByName(name, volume = 0.3) {
+        const soundPath = this.getSoundByName(name);
+        if (!soundPath) {
+            console.warn(`Sound "${name}" not found`);
+            this.playFallbackSound();
+            return;
+        }
+
+        const audio = new Audio(soundPath);
+        audio.volume = volume;
+        audio.play().catch(err => {
+            console.error(`Failed to play sound "${name}":`, err);
+            this.playFallbackSound();
+        });
+    }
+
     // Play a random Discord sound effect
     playRandomSound(volume = 0.3) {
         const soundPath = this.getRandomSound();
