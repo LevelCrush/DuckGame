@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2024-08-13
+
+### 💀 ETERNAL CHAOS - The Final Form
+
+#### Changed
+- **DUCKS ARE ETERNAL**: Removed 3-second despawn timer completely
+- Ducks now remain on screen forever until clicked
+- No escape from the ever-growing duck army
+
+#### Impact
+- Combined with v2.1.0 exponential spawning = ULTIMATE CHAOS
+- Screen becomes completely overwhelmed
+- Ducks accumulate infinitely
+- The true vision of Lord Xol achieved
+
 ## [2.1.0] - 2024-08-13
 
 ### 🔥 Maximum Chaos Update - Lord Xol's Ultimate Vision
@@ -130,6 +145,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **v2.2.0** - Eternal Chaos: Ducks never despawn
+- **v2.1.0** - Maximum Chaos: Every kill spawns 2 ducks
 - **v2.0.0** - Infernal Update with volume control and spawn effects
 - **v1.1.0** - Discord integration and asset management
 - **v1.0.0** - Initial release with core gameplay

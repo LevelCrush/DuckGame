@@ -25,10 +25,20 @@ The game was created under the direction of "Lord Xol" with evolving requirement
 - Complete theme transformation to hellfire aesthetic
 - Devil emojis replacing clouds
 - Taco Bell celebration sound every 5 ducks
-- Duck duplication mechanics for exponential difficulty
 - Volume control for loud Discord sounds (default 20%)
 - Massive flame wall covering bottom 20% of screen
 - Divine spawn effects for bonus ducks (light rays, smoke, feathers)
+
+**Maximum Chaos (v2.1):**
+- Duck duplication on EVERY kill (not just every 5)
+- Exponential growth formula: each kill spawns 2 more ducks
+- Mathematical progression: 1→3→7→15→31→63→127...
+
+**Eternal Chaos (v2.2):**
+- Removed 3-second despawn timer completely
+- Ducks now remain on screen forever until clicked
+- Combined with exponential spawning for ultimate chaos
+- Screen inevitably becomes overwhelmed with ducks
 
 ### Code Style Preferences
 - Keep the game in a **single HTML file** for GitHub Pages deployment
@@ -100,13 +110,15 @@ The game was created under the direction of "Lord Xol" with evolving requirement
 - Test with both Discord assets present and absent
 - Volume parameter now propagates through all sound methods
 
-### Managing Game Difficulty (v2.1 - Maximum Chaos)
+### Managing Game Difficulty (v2.2 - Eternal Chaos)
 - Duck spawn interval: 1000ms (1 second)
 - Duck duplication: EVERY kill spawns 2 more (exponential growth)
+- Duck despawn timer: REMOVED - ducks stay forever (v2.2)
 - Taco Bell sound: Every 5 catches (celebration)
 - Timer bonus triggers: Every 15 catches (+30 seconds)
 - Volume default: 20% (adjustable via slider)
 - Mathematical growth: 1 → 3 → 7 → 15 → 31 → 63 → 127 ducks...
+- Screen overflow: Inevitable due to no despawning + exponential spawning
 
 ## Testing Checklist
 
@@ -128,22 +140,32 @@ When making changes, verify:
 - Use CSS transforms over position changes
 - Batch DOM updates when possible
 
-## Recent Updates (v2.0)
+## Recent Updates (v2.2)
 
-### Major Changes Implemented
+### v2.2.0 - Eternal Chaos
+- **Duck Persistence**: Removed 3-second despawn timer
+- **Infinite Accumulation**: Ducks build up endlessly
+- **Code Change**: Removed `setTimeout` for duck removal
+
+### v2.1.0 - Maximum Chaos
+- **Exponential Spawning**: Every kill creates 2 new ducks
+- **Immediate Duplication**: No delay, instant multiplication
+- **Chaos Mathematics**: Geometric progression of duck count
+
+### v2.0.0 - Infernal Update
 - **Volume Control**: Slider UI with 0-100% range
 - **Infernal Theme**: Complete visual overhaul with fire and devils
 - **Spawn Effects**: Multi-layered animation system for bonus ducks
-- **Duck Duplication**: Exponential difficulty scaling
 - **Timer Extensions**: Reward system for skilled players
 - **Enhanced Sounds**: Discord-specific audio integration
 
-### Technical Improvements
+### Technical Improvements Made
 - Modified `spawnDuck()` signature for position control
 - Added `createSpawnEffect()` for visual feedback
 - Enhanced `discord-assets.js` with named sound support
 - Implemented `gameVolume` global variable for audio control
 - Added boundary checking for spawn positions
+- Removed despawn timer in v2.2.0
 
 ## Future Enhancement Ideas
 

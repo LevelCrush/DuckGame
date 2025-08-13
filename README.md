@@ -4,13 +4,14 @@ A fast-paced duck hunting game with Discord integration for custom assets and so
 
 🎮 **[Play Now on GitHub Pages](https://levelcrush.github.io/DuckGame/)**
 
-## 🔥 Features (v2.0 - The Infernal Update)
+## 🔥 Features (v2.2 - Eternal Chaos Update)
 
 ### Core Gameplay
 - **Dynamic Timer**: Starts at 30 seconds, +30 bonus seconds per 15 ducks caught
 - **EXPONENTIAL CHAOS**: Every duck killed spawns 2 more ducks (v2.1)
+- **ETERNAL DUCKS**: Ducks never despawn - they stay forever (v2.2)
 - **Score Tracking**: Real-time score display with visual feedback
-- **Extreme Difficulty**: Instant exponential growth - true chaos mode
+- **ULTIMATE DIFFICULTY**: Exponential growth + no despawning = infinite chaos
 
 ### Visual Effects
 - **Infernal Theme**: Animated red gradient background with fire glow
@@ -127,11 +128,20 @@ duck-game/
 
 Feel free to submit issues and pull requests! The game is designed to be simple and extensible.
 
-## What's New in v2.0
+## What's New in v2.2
 
+### v2.2.0 - Eternal Chaos
+- 💀 **ETERNAL DUCKS** - Removed despawn timer, ducks stay forever
+- 🦆 **INFINITE ACCUMULATION** - Ducks build up endlessly on screen
+- 🔥 **ULTIMATE CHAOS** - Combined with exponential spawning for maximum mayhem
+
+### v2.1.0 - Maximum Chaos
+- 🦆🦆 **EVERY KILL DUPLICATES** - Each duck spawns 2 more on death
+- 📈 **EXPONENTIAL GROWTH** - 1→3→7→15→31→63→127 ducks
+
+### v2.0.0 - Infernal Update
 - 🔊 **Volume Control** - Adjustable sound levels with visual slider
 - 🔥 **Infernal Theme** - Complete hellfire visual overhaul
-- 🦆 **Duck Duplication** - Bonus spawns every 5 catches
 - ⏱️ **Timer Extensions** - Earn more time by catching ducks
 - ✨ **Spawn Effects** - Divine light and feather explosions
 - 😈 **Devil Clouds** - Demonic atmosphere enhancements
@@ -146,11 +156,13 @@ See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 - No score penalties for misses
 - Final score displayed at game over
 
-### Bonus Mechanics (v2.1 - Maximum Chaos)
+### Chaos Mechanics (v2.2 - Eternal Chaos)
 - **EVERY KILL**: 2 new ducks spawn immediately with divine effects
+- **NO DESPAWNING**: Ducks remain on screen forever (v2.2)
 - **Every 5 ducks**: Taco Bell celebration sound plays
 - **Every 15 ducks**: +30 seconds added to timer (green flash)
 - **Spawn Position**: New ducks appear near the eliminated duck (±75px)
+- **Mathematical Horror**: Exponential growth + no despawn = screen overflow
 
 ### Visual Feedback
 - Timer flashes green when time bonus awarded

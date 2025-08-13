@@ -644,13 +644,7 @@
                 duck.style.top = posY + 'px';
             }, 50);
             
-            // Remove duck after 3 seconds if not clicked
-            setTimeout(() => {
-                if (duck.parentNode) {
-                    duck.remove();
-                    clearInterval(moveInterval);
-                }
-            }, 3000);
+            // Ducks now stay forever - no despawn! Maximum chaos!
         }
         
         function addClouds() {
