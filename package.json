@@ -1,0 +1,13 @@
+{
+  "name": "duck-game",
+  "version": "1.0.0",
+  "description": "Duck hunting game with Discord assets integration",
+  "scripts": {
+    "fetch": "node fetch-discord-assets.js",
+    "fetch-emojis": "node fetch-discord-assets.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5"
+  }
+}

@@ -217,6 +217,8 @@
     </style>
 </head>
 <body>
+    <!-- Load Discord Assets Integration -->
+    <script src="discord-assets.js"></script>
     <div id="gameArea">
         <div id="score">Score: 0</div>
         <div id="timer">Time: 30</div>
@@ -241,26 +243,36 @@
         let timerInterval;
         let duckInterval;
         
-        // Create hit marker sound using Web Audio API
+        // Load Discord assets on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('Loading Discord assets...');
+            await window.discordAssets.loadAssets();
+            console.log('Discord assets loaded!');
+        });
+        
+        // Play hit sound - uses Discord sounds if available
         function playHitSound() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // Create oscillator for beep sound
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.type = 'square';
-            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.1);
+            if (window.discordAssets && window.discordAssets.loaded) {
+                window.discordAssets.playRandomSound(0.3);
+            } else {
+                // Fallback to Web Audio API
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            }
         }
         
         function startGame() {

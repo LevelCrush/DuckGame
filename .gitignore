@@ -1,0 +1,44 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+out/
+
+# Cache and temporary files
+.cache/
+tmp/
+temp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Discord assets (fetched data)
+public/discord-assets/
+discord-assets/
+
+# API keys and secrets
+*.key
+*.pem
