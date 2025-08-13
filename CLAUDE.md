@@ -1,0 +1,176 @@
+# Claude Development Context
+
+This document contains important context and notes for AI assistants (particularly Claude) working on the Duck Game project.
+
+## Project Overview
+
+**Duck Game** is a browser-based clicking game where players hunt ducks within a 30-second time limit. The game features Discord integration for custom assets and is hosted on GitHub Pages.
+
+🎮 **Live Game**: [https://levelcrush.github.io/DuckGame/](https://levelcrush.github.io/DuckGame/)
+
+## Key Development Guidelines
+
+### Lord Xol's Vision
+The game was created under the direction of "Lord Xol" with specific requirements:
+- Visceral feedback when ducks are eliminated (blood, feathers, smoke)
+- Hit marker sound effects on successful clicks
+- Bright red crosshair cursor when hovering over targets
+- Integration with Discord assets for enhanced gameplay
+
+### Code Style Preferences
+- Keep the game in a **single HTML file** for GitHub Pages deployment
+- Use **Web Audio API** for fallback sounds
+- Implement **visual effects** using CSS animations
+- Maintain **simple, readable code** without unnecessary complexity
+
+### Security Considerations
+- **NEVER commit `.env` files** or Discord tokens to the repository
+- The `.gitignore` is configured to exclude sensitive files
+- Discord bot tokens and guild IDs must remain private
+- Use Base64 encoding for assets when deploying to GitHub Pages
+
+## Technical Architecture
+
+### Core Components
+
+1. **index.html** - Single-file game containing:
+   - Game logic and state management
+   - CSS animations for visual effects
+   - Discord asset integration hooks
+
+2. **discord-assets.js** - Module that:
+   - Loads Discord emojis, stickers, and sounds
+   - Provides fallback mechanisms
+   - Manages asset selection and playback
+
+3. **fetch-discord-assets.js** - Node script that:
+   - Connects to Discord via bot token
+   - Downloads server assets
+   - Creates manifest files for web use
+
+### Discord Integration Flow
+
+```
+1. Developer runs: npm install
+2. Developer configures: .env file with Discord credentials
+3. Developer fetches: npm run fetch (downloads Discord assets)
+4. Game loads: discord-assets.js module on page load
+5. Runtime: Game uses Discord sounds/images if available, falls back to defaults
+```
+
+### Asset Storage Strategy
+
+- **Development**: Assets stored as files in `/emojis`, `/sounds`, `/stickers`
+- **Production**: Assets embedded as Base64 in manifest.json files
+- **Fallback**: Web Audio API and emoji characters when Discord assets unavailable
+
+## Common Tasks
+
+### Adding New Visual Effects
+- Add CSS classes in the `<style>` section
+- Create elements dynamically in JavaScript
+- Use `setTimeout` to clean up DOM elements
+
+### Modifying Game Mechanics
+- Game state variables are at the top of the `<script>` section
+- `spawnDuck()` controls duck creation and behavior
+- `startGame()` and `endGame()` manage game flow
+
+### Updating Discord Integration
+- Modify `fetch-discord-assets.js` for fetching logic
+- Update `discord-assets.js` for runtime usage
+- Test with both Discord assets present and absent
+
+## Testing Checklist
+
+When making changes, verify:
+- [ ] Game works without Discord assets (fallback mode)
+- [ ] Game works with Discord assets loaded
+- [ ] No console errors in browser
+- [ ] Visual effects render correctly
+- [ ] Sounds play appropriately
+- [ ] Score tracking functions properly
+- [ ] Timer counts down correctly
+- [ ] Game over screen displays
+
+## Performance Considerations
+
+- Limit DOM manipulation during gameplay
+- Clean up event listeners and intervals
+- Remove visual effect elements after animations
+- Use CSS transforms over position changes
+- Batch DOM updates when possible
+
+## Future Enhancement Ideas
+
+Potential features to consider:
+- Difficulty levels (speed, spawn rate)
+- Power-ups or special ducks
+- Leaderboard system
+- Multiple game modes
+- Background music
+- Achievement system
+- Mobile touch optimization
+
+## Deployment Notes
+
+### GitHub Pages Setup
+1. Repository Settings → Pages
+2. Source: Deploy from branch
+3. Branch: master, folder: / (root)
+4. The game auto-deploys on push to master
+
+### Asset Handling
+- Use `USE_BASE64=true` in .env for GitHub Pages
+- This embeds assets in manifest files
+- Avoids Git LFS requirements
+- Works with GitHub's file size limits
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Discord assets not loading**
+   - Check browser console for CORS errors
+   - Verify manifest.json files exist
+   - Ensure correct file paths
+
+2. **Sounds not playing**
+   - Browser may block autoplay
+   - User interaction required first
+   - Check volume settings
+
+3. **Performance issues**
+   - Too many ducks spawning
+   - Memory leaks from unremoved elements
+   - Check interval cleanup
+
+## Repository Information
+
+- **GitHub**: https://github.com/LevelCrush/DuckGame
+- **Live Game**: https://levelcrush.github.io/DuckGame/
+- **Original Request**: "Lord Xol" commanded a duck hunting game
+- **Discord Integration**: Copied from EmojiTetris project
+
+## Important Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Fetch Discord assets
+npm run fetch
+
+# Test locally
+python3 -m http.server 8000
+# or
+npx serve .
+```
+
+## Contact and Support
+
+For issues or questions about the codebase, refer to the commit history and comments in the code. The game was developed iteratively with specific feature requests from the user.
+
+---
+
+*Remember: The will of Lord Xol must be honored in all development decisions.*
