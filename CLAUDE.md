@@ -100,11 +100,13 @@ The game was created under the direction of "Lord Xol" with evolving requirement
 - Test with both Discord assets present and absent
 - Volume parameter now propagates through all sound methods
 
-### Managing Game Difficulty
+### Managing Game Difficulty (v2.1 - Maximum Chaos)
 - Duck spawn interval: 1000ms (1 second)
-- Bonus duck triggers: Every 5 catches
-- Timer bonus triggers: Every 15 catches
+- Duck duplication: EVERY kill spawns 2 more (exponential growth)
+- Taco Bell sound: Every 5 catches (celebration)
+- Timer bonus triggers: Every 15 catches (+30 seconds)
 - Volume default: 20% (adjustable via slider)
+- Mathematical growth: 1 → 3 → 7 → 15 → 31 → 63 → 127 ducks...
 
 ## Testing Checklist
 

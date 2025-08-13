@@ -8,9 +8,9 @@ A fast-paced duck hunting game with Discord integration for custom assets and so
 
 ### Core Gameplay
 - **Dynamic Timer**: Starts at 30 seconds, +30 bonus seconds per 15 ducks caught
-- **Duck Multiplication**: Every 5 ducks caught spawns 2 bonus ducks with divine effects
+- **EXPONENTIAL CHAOS**: Every duck killed spawns 2 more ducks (v2.1)
 - **Score Tracking**: Real-time score display with visual feedback
-- **Progressive Difficulty**: Exponential challenge increase through duck duplication
+- **Extreme Difficulty**: Instant exponential growth - true chaos mode
 
 ### Visual Effects
 - **Infernal Theme**: Animated red gradient background with fire glow
@@ -146,10 +146,11 @@ See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 - No score penalties for misses
 - Final score displayed at game over
 
-### Bonus Mechanics
-- **Every 5 ducks**: Taco Bell sound + 2 bonus ducks spawn
+### Bonus Mechanics (v2.1 - Maximum Chaos)
+- **EVERY KILL**: 2 new ducks spawn immediately with divine effects
+- **Every 5 ducks**: Taco Bell celebration sound plays
 - **Every 15 ducks**: +30 seconds added to timer (green flash)
-- **Spawn Position**: Bonus ducks appear near the eliminated duck
+- **Spawn Position**: New ducks appear near the eliminated duck (±75px)
 
 ### Visual Feedback
 - Timer flashes green when time bonus awarded

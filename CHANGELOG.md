@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2024-08-13
+
+### 🔥 Maximum Chaos Update - Lord Xol's Ultimate Vision
+
+#### Changed
+- **EXPONENTIAL CHAOS**: Duck duplication now triggers on EVERY kill (not just every 5)
+- Each duck killed spawns 2 more ducks immediately
+- Game difficulty now increases exponentially from the first kill
+- Taco Bell sound still plays every 5 kills as celebration milestone
+
+#### Impact
+- Games become overwhelmingly chaotic within seconds
+- Screen fills with ducks at an exponential rate
+- True test of clicking speed and accuracy
+- Absolute mayhem as Lord Xol intended
+
 ## [2.0.0] - 2024-08-13
 
 ### 🔥 The Infernal Update - Lord Xol's Vision Realized

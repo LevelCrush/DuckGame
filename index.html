@@ -556,6 +556,10 @@
                 // Play hit sound
                 playHitSound();
                 
+                // Get duck position for effects
+                const duckX = parseInt(duck.style.left);
+                const duckY = parseInt(duck.style.top);
+                
                 // Check for timer bonus every 15 ducks
                 if (ducksCaught % 15 === 0) {
                     timeLeft += 30;
@@ -566,22 +570,17 @@
                     setTimeout(() => timer.style.color = 'white', 500);
                 }
                 
-                // Every 5 ducks: play Taco Bell sound and duplicate ducks!
-                if (ducksCaught % 5 === 0) {
-                    if (window.discordAssets && window.discordAssets.loaded) {
-                        window.discordAssets.playSoundByName('tbell', gameVolume * 1.2);  // Slightly louder for celebration
-                    }
-                    // DUPLICATE THE DUCKS near the killed duck!
-                    for (let i = 0; i < 2; i++) {
-                        setTimeout(() => {
-                            spawnDuck(duckX, duckY, true);  // Pass position and request effect
-                        }, i * 200);  // Stagger the spawns
-                    }
+                // DUPLICATE THE DUCKS on EVERY KILL! Maximum chaos!
+                for (let i = 0; i < 2; i++) {
+                    setTimeout(() => {
+                        spawnDuck(duckX, duckY, true);  // Pass position and request effect
+                    }, i * 200);  // Stagger the spawns
                 }
                 
-                // Get duck position for effects
-                const duckX = parseInt(duck.style.left);
-                const duckY = parseInt(duck.style.top);
+                // Play Taco Bell sound every 5 ducks (celebration milestone)
+                if (ducksCaught % 5 === 0 && window.discordAssets && window.discordAssets.loaded) {
+                    window.discordAssets.playSoundByName('tbell', gameVolume * 1.2);  // Slightly louder for celebration
+                }
                 
                 // Create blood splatter
                 const blood = document.createElement('div');
